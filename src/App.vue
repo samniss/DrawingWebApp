@@ -72,6 +72,13 @@ export default {
       whdialog.style.left=event.clientX+'px';//make the top left x coordinate of the dialog box appear on the mouse x coordinate
       whdialog.style.top=event.clientY+'px';//make the top left y coordinate of the dialog box appear on the mouse y coordinate
     }
+    else if (this.shape.type==="square"){
+      this.GetCoors(event);
+      var dialog2=document.getElementById("dialog-box");
+      dialog2.style.display="block";      //show the dialog box for the user to enter the radius
+      dialog2.style.left=event.clientX+'px';//make the top left x coordinate of the dialog box appear on the mouse x coordinate
+      dialog2.style.top=event.clientY+'px';//make the top left y coordinate of the dialog box appear on the mouse y coordinate
+    }
     else if(this.shape.type==="triangle"){
       this.GetCoors(event);
       this.Triangle();
@@ -122,6 +129,13 @@ export default {
       this.shapes.push(this.shape);//put the shape into the shapes array
       this.shape=null;//reset the shape pointer
     },
+    Square:function(){
+      var canvas=document.getElementById("canvas");
+      var ctx=canvas.getContext('2d');
+      ctx.beginPath();
+      ctx.rect(this.shape.x[0],this.shape.y[0],this.shape.side,this.shape.side);
+      ctx.stroke();
+    },
     Triangle:function(){
       if(this.shape.x.length===3){//if the user clicked on the canvas three times
         var canvas=document.getElementById('canvas');
@@ -149,10 +163,18 @@ export default {
 
     DialogInput:function(input){
       if(this.shape.type==="circle"){
-        this.shape.radius=parseFloat(input);
+      this.shape.radius=parseFloat(input);
+      }
+      else if (this.shape.type==="square"){
+        this.shape.side=parseFloat(input);
+      }
       var dialog=document.getElementById("dialog-box");
       dialog.style.display="none";
+      if(this.shape.type==="circle"){
       this.Circle();
+      }
+      else if (this.shape.type==="square"){
+        this.Square();
       }
     },
     WHDialogInput:function(width,height){

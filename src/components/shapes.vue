@@ -3,6 +3,7 @@
     <button id="line" @click="Line()">Line</button>
     <button id="circle" @click="Circle()">Circle</button>
     <button id="rectangle" @click="Rectangle()">Rectangle</button>
+    <button id="square" @click="Square()">Square</button>
     <button id="triangle"  @click="Triangle()">Triangle</button>
     <button id="ellipse" @click="Ellipse()">Ellipse</button>
 </div>
@@ -44,6 +45,16 @@ export default {
             }
             this.$emit('draw-shape',this.shape);
         },
+        Square:function(){
+            this.shape={
+                type:"square",
+                x:[],
+                y:[],
+                side:0
+            }
+
+            this.$emit('draw-shape',this.shape);
+        },
         Triangle:function(){
             this.shape={
                 type:"triangle",
@@ -62,7 +73,8 @@ export default {
                 rotationAngle:0
             }
             this.$emit('draw-shape',this.shape);
-        }
+        },
+        
     }
 }
 </script>
