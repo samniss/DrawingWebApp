@@ -163,10 +163,10 @@ export default {
 
     DialogInput:function(input){
       if(this.shape.type==="circle"){
-      this.shape.radius=parseFloat(input);
+      this.shape.radius=parseFloat(input)*38;
       }
       else if (this.shape.type==="square"){
-        this.shape.side=parseFloat(input);
+        this.shape.side=parseFloat(input)*38;
       }
       var dialog=document.getElementById("dialog-box");
       dialog.style.display="none";
@@ -178,15 +178,15 @@ export default {
       }
     },
     WHDialogInput:function(width,height){
-      this.shape.width=parseFloat(width);
-      this.shape.height=parseFloat(height);
+      this.shape.width=parseFloat(width)*38;
+      this.shape.height=parseFloat(height)*38;
       var whdialog=document.getElementById("w-h-dialog");
       whdialog.style.display="none";
       this.Rectangle();
     },
     EllipseDialogInput:function(radiusX,radiusY,rotationAngle){
-      this.shape.radiusX=radiusX;
-      this.shape.radiusY=radiusY;
+      this.shape.radiusX=radiusX*38;
+      this.shape.radiusY=radiusY*38;
       this.shape.rotationAngle=rotationAngle;
       var ellipsedialog=document.getElementById("ellipse-dialog");
       ellipsedialog.style.display="none";
