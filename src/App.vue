@@ -1,7 +1,7 @@
 <template>
   <div id="app">
      <shapes @draw-shape="DrawShape" id="shapes"/>
-    <canvas id="canvas" height=500px width=500px @click="Draw"></canvas>
+    <canvas id="canvas" height=500px width=1000px @click="Draw"></canvas>
     <DialogBox  @dialog-input="DialogInput" id="dialog-box"/>
     <WHDialog   @w-h-input="WHDialogInput" id="w-h-dialog"/>
     <EllipseDialog @ellipse-input="EllipseDialogInput" id="ellipse-dialog"/>
@@ -97,10 +97,11 @@ export default {
       //Draw the circle
       var canvas=document.getElementById("canvas");
       var ctx=canvas.getContext('2d');
+      ctx.fillstyle='red';
       ctx.beginPath();
       ctx.arc(this.shape.x[0],this.shape.y[0],this.shape.radius,0,Math.PI*2);
-      ctx.stroke();
-
+      ctx.fill();
+     // ctx.stroke();
       this.shapes.push(this.shape);//put the shape in the shapes array
       this.shape=null;//reset the shape pointer
     },
