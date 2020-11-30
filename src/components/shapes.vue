@@ -23,7 +23,9 @@ export default {
                 type:"circle",
                 x:[],
                 y:[],
-                radius:0
+                radius:0,
+                id:0,
+                color:"white"
             }
             this.$emit('draw-shape',this.shape)
         },

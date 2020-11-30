@@ -14,11 +14,13 @@ import shapes from "../src/components/shapes"
 import DialogBox from "../src/components/Dialog"
 import WHDialog from "../src/components/WHDialog"
 import EllipseDialog from "../src//components//EllipseDialog";
+const axios = require('axios').default;
 export default {
   name: 'App',
   data: function(){
     return {
       shape:null,
+      counter:0,
       shapes:[]//array of shapes
     }
   },
@@ -100,9 +102,18 @@ export default {
       ctx.fillstyle='red';
       ctx.beginPath();
       ctx.arc(this.shape.x[0],this.shape.y[0],this.shape.radius,0,Math.PI*2);
-      ctx.fill();
-     // ctx.stroke();
+      ctx.stroke();
       this.shapes.push(this.shape);//put the shape in the shapes array
+      const t=this;
+      
+      axios.post("http://localhost:8081/draw",t.shape
+      ).then(response=>{
+        console.log(response);
+      }).catch(e=>{
+        console.log("THIS IS THE ERROR");
+        console.log(e);
+      })
+
       this.shape=null;//reset the shape pointer
     },
     Line:function(){
@@ -165,6 +176,7 @@ export default {
     DialogInput:function(input){
       if(this.shape.type==="circle"){
       this.shape.radius=parseFloat(input)*38;
+      console.log(parseFloat(input));
       }
       else if (this.shape.type==="square"){
         this.shape.side=parseFloat(input)*38;
