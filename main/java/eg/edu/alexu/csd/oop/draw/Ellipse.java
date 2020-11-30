@@ -1,5 +1,7 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -20,6 +22,8 @@ public class Ellipse implements IShape {
     public String getType() {
         return type;
     }
+
+
 
     public void setX(Number x) {
         this.x = x;
@@ -80,5 +84,13 @@ public class Ellipse implements IShape {
         setX(((ArrayList<Number>) map.get("x")).get(0));
         setY(((ArrayList<Number>)map.get("y")).get(0));
         setRotationAngle((Number) map.get("rotationAngle"));
+    }
+    @Override
+    public IShape clone(){
+        ObjectMapper objectMapper=new ObjectMapper();
+        Map<?,?> map= objectMapper.convertValue(this,Map.class);
+        IShape shape=new Ellipse();
+        shape.draw(map);
+        return shape;
     }
 }

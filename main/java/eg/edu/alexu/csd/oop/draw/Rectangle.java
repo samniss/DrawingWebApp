@@ -1,5 +1,7 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -22,6 +24,7 @@ public class Rectangle implements IShape{
     public void setColor(String color) {
         this.color = color;
     }
+
 
     public int getId() {
         return id;
@@ -70,5 +73,13 @@ public class Rectangle implements IShape{
         setWidth((Number) map.get("width"));
         setHeight((Number) map.get("height"));
 
+    }
+    @Override
+        public IShape clone(){
+        ObjectMapper objectMapper=new ObjectMapper();
+        Map<?,?> map= objectMapper.convertValue(this,Map.class);
+        IShape shape=new Rectangle();
+        shape.draw(map);
+        return shape;
     }
 }

@@ -1,5 +1,7 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -11,6 +13,8 @@ public class Square implements IShape{
     public String getType() {
         return type;
     }
+
+
 
     int id;
     String color;
@@ -60,5 +64,13 @@ public class Square implements IShape{
         setX(((ArrayList<Number>)map.get("x")).get(0));
         setY(((ArrayList<Number>)map.get("y")).get(0));
         setSide((Number) map.get("side"));
+    }
+    @Override
+        public IShape clone(){
+        ObjectMapper objectMapper=new ObjectMapper();
+        Map<?,?> map= objectMapper.convertValue(this,Map.class);
+        IShape shape=new Square();
+        shape.draw(map);
+        return shape;
     }
 }

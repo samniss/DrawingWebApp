@@ -1,4 +1,7 @@
 package eg.edu.alexu.csd.oop.draw;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.logging.log4j.spi.ObjectThreadContextMap;
+
 import java.lang.Number;
 import java.util.ArrayList;
 import java.util.Map;
@@ -17,6 +20,8 @@ public class Circle implements IShape {
     public void setColor(String color) {
         this.color = color;
     }
+
+
 
     public String getType() {
         return type;
@@ -59,6 +64,14 @@ public class Circle implements IShape {
         setColor((String)map.get("color"));
         setX(((ArrayList<Number>) map.get("x")).get(0));
         setY(((ArrayList<Number>)map.get("y")).get(0));
+    }
+    @Override
+    public IShape clone()  {
+        ObjectMapper objectMapper=new ObjectMapper();
+       Map<?,?> map= objectMapper.convertValue(this,Map.class);
+       IShape shape=new Circle();
+       shape.draw(map);
+    return shape;
     }
 
 }

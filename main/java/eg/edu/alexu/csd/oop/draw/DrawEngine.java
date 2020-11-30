@@ -58,17 +58,25 @@ public class DrawEngine {//Singleton Class
         shapeOp.put("Update",shape);
         undo.push(shapeOp);//store the old shape in the undo stack
         shape.draw(map);//update shape
+        /**
+        TODO check if shape.draw(map) works
+         **/
     }
-    public void removeShape(int id){
+    public IShape removeShape(int id){
         Hashtable<String,IShape> shapeOp=new Hashtable<String,IShape>();
+        shape=shapes.get(id);
         shapeOp.put("Remove",shape);
         undo.push(shapeOp);//store the old shape in the undo stack
-        shapes.remove(id);
+        nullShape nullShape=new nullShape();
+        nullShape.setId(shape.getId());
+        shapes.set(id,nullShape);
+        return nullShape;
     }
-    public void copyShape(int id){
-        /**
-         * TODO
-         */
+    public IShape copyShape(int id){
+        IShape shape=shapes.get(id);
+        IShape copy=shape.clone();
+        copy.setId(id);
+        return copy;
     }
     public ArrayList<IShape> getShapes(){
         return this.shapes;
@@ -83,8 +91,11 @@ public class DrawEngine {//Singleton Class
 				 */
                 redo.push(shapeOp);
                 IShape shape=shapeOp.get("Draw");
-                removeShape(shape.getId());
-                return null;
+                nullShape nullShape=new nullShape();
+                nullShape.setId(shape.getId());
+                shapes.set(shape.getId(),nullShape);//put null in the shapes arraylist to indicate that the shape has been removed
+
+                return nullShape;
             }
             else if(shapeOp.containsKey("Update")){
 				/*
@@ -93,7 +104,7 @@ public class DrawEngine {//Singleton Class
 				stack and then take the old shape which is stored in shapeOp and put it in the arraylist in the draw engine
 				 */
                 IShape oldShape=shapeOp.get("Update");//old shape
-                IShape newShape=(getShapes()).get(oldShape.getId());//get new shape from array list
+                IShape newShape=shapes.get(oldShape.getId());//get new shape from array list
                 Hashtable<String,IShape>newShapeOp=new Hashtable<String,IShape>();
                 newShapeOp.put("Update",newShape);
                 redo.push(newShapeOp);//put the new shape in the redo stack
@@ -105,7 +116,7 @@ public class DrawEngine {//Singleton Class
 				to undo remove we put the shape in the shapes arraylist in the draw engine  again and push the shape in the redo stack
 				 */
                 IShape shape=shapeOp.get("Remove");//this is the shape that was removed
-                shapes.add(shape.getId(),shape);//put the shape in the arraylist
+                shapes.set(shape.getId(),shape);//put the shape in the arraylist
                 redo.push(shapeOp);
                 return shape;
             }
@@ -120,7 +131,7 @@ public class DrawEngine {//Singleton Class
                 we put the shape in the arraylist of shapes
                  */
                 IShape shape=shapeOp.get("Draw");
-                shapes.add(shape.getId(),shape);//put the shape in the arraylist
+                shapes.set(shape.getId(),shape);//put the shape in the arraylist
                 undo.push(shapeOp);
                 return shape;
             }
@@ -134,7 +145,7 @@ public class DrawEngine {//Singleton Class
                 Hashtable<String,IShape>oldShapeOp=new Hashtable<String,IShape>();
                 oldShapeOp.put("Update",oldShape);
                 undo.push(oldShapeOp);
-                shapes.set(shape.getId(),shape);
+                shapes.set(newShape.getId(),newShape);
                 return newShape;
             }
             else if (shapeOp.containsKey("Remove")){
@@ -142,9 +153,11 @@ public class DrawEngine {//Singleton Class
                 we remove the shape that is in the redo stack
                  */
                 IShape shape=shapeOp.get("Remove");//shape to be removed
-                removeShape(shape.getId());
+                nullShape nullShape=new nullShape();
+                nullShape.setId(shape.getId());
+                shapes.set(shape.getId(),nullShape);
                 undo.push(shapeOp);
-                return null;
+                return nullShape;
             }
         }
         return null;

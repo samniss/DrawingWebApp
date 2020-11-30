@@ -45,17 +45,24 @@ public class BackendApplication {
 		engine.updateShape(map);
 	}
 	@RequestMapping({"/remove"})
-		public void removeShape(@RequestBody int id){
-			engine.removeShape(id);
+	public IShape removeShape(@RequestBody int id){
+			return engine.removeShape(id);
 		}
+
 		@RequestMapping({"/undo"})
 		public IShape undo(){
 		return	engine.undo();
 	}
+
 		@RequestMapping({"/redo"})
-	public IShape redo(){
+		public IShape redo(){
 		return engine.redo();
 		}
 
+		@RequestMapping({"/copy"})
+		public IShape copy(int id){
+			return engine.copyShape(id);
+			}
 
-	}
+}
+
