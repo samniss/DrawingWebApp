@@ -14,6 +14,7 @@ import java.util.Map;
 @SpringBootApplication
 @RestController
 public class BackendApplication {
+	DrawEngine engine = DrawEngine.getInstance();
 
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
@@ -28,8 +29,23 @@ public class BackendApplication {
 	} catch (JsonProcessingException e) {
 		e.printStackTrace();
 	}
-	DrawEngine engine = DrawEngine.getInstance();
+
 	engine.addShape(map);
-	ArrayList<IShape> list = engine.getShapes();
 	}
+	@RequestMapping({"/update"})
+	public void updateShape(@RequestBody String shapeJson){
+		ObjectMapper objectMapper=new ObjectMapper();
+		Map<?,?> map=null;
+		try{
+			map=objectMapper.readValue(shapeJson,Map.class);
+		}catch(JsonProcessingException e){
+			e.printStackTrace();
+		}
+		engine.updateShape(map);
+	}
+	@RequestMapping({"/remove"})
+		public void removeShape(@RequestBody int id){
+			engine.removeShape(id);
+		}
+
 	}

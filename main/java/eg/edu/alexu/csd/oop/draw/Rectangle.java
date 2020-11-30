@@ -1,12 +1,13 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Rectangle implements IShape{
-   float x;
-   float y;
-   float width;
-   float height;
+   Number x;
+   Number y;
+   Number width;
+   Number height;
     int id;
     String color;
 
@@ -26,44 +27,44 @@ public class Rectangle implements IShape{
         this.id = id;
     }
 
-    public float getX() {
+    public Number getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(Number x) {
         this.x = x;
     }
 
-    public float getY() {
+    public Number getY() {
         return y;
     }
 
-    public void setY(float y) {
+    public void setY(Number y) {
         this.y = y;
     }
 
-    public float getWidth() {
+    public Number getWidth() {
         return width;
     }
 
-    public void setWidth(float width) {
+    public void setWidth(Number width) {
         this.width = width;
     }
 
-    public float getHeight() {
+    public Number getHeight() {
         return height;
     }
 
-    public void setHeight(float height) {
+    public void setHeight(Number height) {
         this.height = height;
     }
     public void draw(Map<?,?> map){
         setId((int)map.get("id"));
         setColor((String)map.get("color"));
-        setX(((float[])map.get("x"))[0]);
-        setY(((float [])map.get("y"))[0]);
-        setWidth((float)map.get("width"));
-        setHeight((float)map.get("height"));
+        setX(((ArrayList<Number>)map.get("x")).get(0));
+        setY(((ArrayList<Number>)map.get("y")).get(0));
+        setWidth((Number) map.get("width"));
+        setHeight((Number) map.get("height"));
 
     }
 }

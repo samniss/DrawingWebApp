@@ -1,53 +1,54 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Ellipse implements IShape {
-    float x;
-    float y;
-    float radiusX;
-    float radiusY;
-    float rotationAngle;
+    Number x;
+    Number y;
+    Number radiusX;
+    Number radiusY;
+    Number rotationAngle;
     String color;
     int id;
 
-    public float getX() {
+    public Number getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(Number x) {
         this.x = x;
     }
 
-    public float getY() {
+    public Number getY() {
         return y;
     }
 
-    public void setY(float y) {
+    public void setY(Number y) {
         this.y = y;
     }
 
-    public float getRadiusX() {
+    public Number getRadiusX() {
         return radiusX;
     }
 
-    public void setRadiusX(float radiusX) {
+    public void setRadiusX(Number radiusX) {
         this.radiusX = radiusX;
     }
 
-    public float getRadiusY() {
+    public Number getRadiusY() {
         return radiusY;
     }
 
-    public void setRadiusY(float radiusY) {
+    public void setRadiusY(Number radiusY) {
         this.radiusY = radiusY;
     }
 
-    public float getRotationAngle() {
+    public Number getRotationAngle() {
         return rotationAngle;
     }
 
-    public void setRotationAngle(float rotationAngle) {
+    public void setRotationAngle(Number rotationAngle) {
         this.rotationAngle = rotationAngle;
     }
 
@@ -67,12 +68,12 @@ public class Ellipse implements IShape {
         this.id = id;
     }
     public void draw(Map<?,?> map){
-        setRadiusX(Float.parseFloat((String)map.get("radiusX")));
-        setRadiusY((float)map.get("radiusY"));
+        setRadiusX((Number)map.get("radiusX"));
+        setRadiusY((Number) map.get("radiusY"));
         setId((int)map.get("id"));
         setColor((String)map.get("color"));
-        setX(((float[]) map.get("x"))[0]);
-        setY(((float[])map.get("y"))[0]);
-        setRotationAngle((float)map.get("rotationAngle"));
+        setX(((ArrayList<Number>) map.get("x")).get(0));
+        setY(((ArrayList<Number>)map.get("y")).get(0));
+        setRotationAngle((Number) map.get("rotationAngle"));
     }
 }

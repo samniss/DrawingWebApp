@@ -1,10 +1,12 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Line implements IShape {
-   float [] x=new float[2];
-   float [] y=new float[2];
+   Number [] x=new Number[2];
+   Number [] y=new Number[2];
    int id;
    String color;
 
@@ -24,26 +26,26 @@ public class Line implements IShape {
         this.id = id;
     }
 
-    public float[] getX() {
+    public Number[] getX() {
         return x;
     }
 
-    public void setX(float[] x) {
+    public void setX(Number[] x) {
         this.x = x;
     }
 
-    public float[] getY() {
+    public Number[] getY() {
         return y;
     }
 
-    public void setY(float[] y) {
+    public void setY(Number[] y) {
         this.y = y;
     }
     public void draw(Map<?,?> map){
         setId((int)map.get("id"));
         setColor((String)map.get("color"));
-        setX((float[])map.get("x"));
-        setY((float [])map.get("y"));
+        setX((Number[])(((ArrayList<Number>)map.get("x")).toArray()));
+        setY((Number[])(((ArrayList<Number>)map.get("y")).toArray()));
 
     }
 }

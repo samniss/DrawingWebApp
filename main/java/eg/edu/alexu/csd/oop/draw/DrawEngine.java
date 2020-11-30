@@ -50,6 +50,9 @@ public class DrawEngine {//Singleton Class
     public void removeShape(int id){
         shapes.remove(id);
     }
+    public void copyShape(int id){
+        
+    }
     public ArrayList<IShape> getShapes(){
         return this.shapes;
     }

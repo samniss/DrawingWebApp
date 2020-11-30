@@ -1,11 +1,12 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 public class Square implements IShape{
-    float x;
-    float y;
-    float side;
+    Number x;
+    Number y;
+    Number side;
     int id;
     String color;
 
@@ -17,27 +18,27 @@ public class Square implements IShape{
         this.color = color;
     }
 
-    public float getX() {
+    public Number getX() {
         return x;
     }
 
-    public void setX(float x) {
+    public void setX(Number x) {
         this.x = x;
     }
 
-    public float getY() {
+    public Number getY() {
         return y;
     }
 
-    public void setY(float y) {
+    public void setY(Number y) {
         this.y = y;
     }
 
-    public float getSide() {
+    public Number getSide() {
         return side;
     }
 
-    public void setSide(float side) {
+    public void setSide(Number side) {
         this.side = side;
     }
 
@@ -51,8 +52,8 @@ public class Square implements IShape{
     public void draw(Map<?,?> map){
         setId((int)map.get("id"));
         setColor((String)map.get("color"));
-        setX(((float[])map.get("x"))[0]);
-        setY(((float [])map.get("y"))[0]);
-        setSide((float)map.get("side"));
+        setX(((ArrayList<Number>)map.get("x")).get(0));
+        setY(((ArrayList<Number>)map.get("y")).get(0));
+        setSide((Number) map.get("side"));
     }
 }
