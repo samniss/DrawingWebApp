@@ -7,9 +7,14 @@ public class Square implements IShape{
     Number x;
     Number y;
     Number side;
+
+    public String getType() {
+        return type;
+    }
+
     int id;
     String color;
-
+    String type="square";
     public String getColor() {
         return color;
     }

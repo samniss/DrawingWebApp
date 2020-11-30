@@ -8,9 +8,14 @@ public class Triangle implements IShape{
     Number []y;
     int id;
     String color;
+    String type="triangle";
 
     public String getColor() {
         return color;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public void setColor(String color) {

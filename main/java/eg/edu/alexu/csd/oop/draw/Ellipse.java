@@ -11,9 +11,14 @@ public class Ellipse implements IShape {
     Number rotationAngle;
     String color;
     int id;
+    String type="ellipse";
 
     public Number getX() {
         return x;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public void setX(Number x) {

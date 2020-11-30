@@ -8,11 +8,15 @@ public class Rectangle implements IShape{
    Number y;
    Number width;
    Number height;
-    int id;
-    String color;
-
+   int id;
+   String color;
+   String type ="rectangle";
     public String getColor() {
         return color;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public void setColor(String color) {

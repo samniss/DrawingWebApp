@@ -1,6 +1,5 @@
 package eg.edu.alexu.csd.oop.draw;
 import java.lang.Number;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -10,13 +9,17 @@ public class Circle implements IShape {
     Number radius;
     int id;
     String color;
-
+    String type="circle";
     public String getColor() {
         return color;
     }
 
     public void setColor(String color) {
         this.color = color;
+    }
+
+    public String getType() {
+        return type;
     }
 
     public int getId() {
@@ -57,4 +60,5 @@ public class Circle implements IShape {
         setX(((ArrayList<Number>) map.get("x")).get(0));
         setY(((ArrayList<Number>)map.get("y")).get(0));
     }
+
 }

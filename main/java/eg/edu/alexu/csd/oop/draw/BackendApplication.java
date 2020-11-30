@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Map;
 @CrossOrigin
 @SpringBootApplication
@@ -47,5 +48,14 @@ public class BackendApplication {
 		public void removeShape(@RequestBody int id){
 			engine.removeShape(id);
 		}
+		@RequestMapping({"/undo"})
+		public IShape undo(){
+		return	engine.undo();
+	}
+		@RequestMapping({"/redo"})
+	public IShape redo(){
+		return engine.redo();
+		}
+
 
 	}

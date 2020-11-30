@@ -10,6 +10,12 @@ public class Line implements IShape {
    int id;
    String color;
 
+    public String getType() {
+        return type;
+    }
+
+    String type="line";
+
     public String getColor() {
         return color;
     }
