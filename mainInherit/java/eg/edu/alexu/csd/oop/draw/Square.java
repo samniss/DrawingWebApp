@@ -34,10 +34,12 @@ public class Square extends OnePointShape{
     }
     @Override
         public IShape clone(){
-        ObjectMapper objectMapper=new ObjectMapper();
-        Map<?,?> map= objectMapper.convertValue(this,Map.class);
-        IShape shape=new Square();
-        shape.draw(map);
+
+        Square shape=new Square();
+        shape.setColor(this.getColor());
+        shape.setX(this.getX());
+        shape.setY(this.getY());
+        shape.setSide(this.getSide());
         return shape;
     }
 }

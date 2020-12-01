@@ -28,10 +28,11 @@ public class Triangle extends MultiplePointsShape{
     }
     @Override
         public IShape clone(){
-        ObjectMapper objectMapper=new ObjectMapper();
-        Map<?,?> map= objectMapper.convertValue(this,Map.class);
-        IShape shape=new Triangle();
-        shape.draw(map);
+
+        Triangle shape=new Triangle();
+        shape.setX(this.getX());
+        shape.setY(this.getY());
+        shape.setColor(this.getColor());
         return shape;
     }
 }

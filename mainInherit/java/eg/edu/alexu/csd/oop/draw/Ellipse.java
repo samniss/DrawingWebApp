@@ -53,10 +53,15 @@ public class Ellipse extends OnePointShape {
     }
     @Override
     public IShape clone(){
-        ObjectMapper objectMapper=new ObjectMapper();
-        Map<?,?> map= objectMapper.convertValue(this,Map.class);
-        IShape shape=new Ellipse();
-        shape.draw(map);
+
+        Ellipse shape=new Ellipse();
+
+        shape.setColor(this.getColor());
+        shape.setX(this.getX());
+        shape.setY(this.getY());
+        shape.setRadiusX(this.getRadiusX());
+        shape.setRadiusY(this.getRadiusY());
+        shape.setRotationAngle(this.getRotationAngle());
         return shape;
     }
 }

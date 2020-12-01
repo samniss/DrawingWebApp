@@ -38,10 +38,13 @@ public Circle(){
     }
     @Override
     public IShape clone()  {
-        ObjectMapper objectMapper=new ObjectMapper();
-       Map<?,?> map= objectMapper.convertValue(this,Map.class);
-       IShape shape=new Circle();
-       shape.draw(map);
+
+       Circle shape=new Circle();
+       shape.setRadius(this.getRadius());
+       shape.setColor(this.getColor());
+       shape.setX(this.getX());
+       shape.setY(this.getY());
+
     return shape;
     }
 }

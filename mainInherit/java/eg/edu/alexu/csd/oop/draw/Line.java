@@ -24,10 +24,12 @@ public class Line extends MultiplePointsShape {
     }
     @Override
         public IShape clone(){
-        ObjectMapper objectMapper=new ObjectMapper();
-        Map<?,?> map= objectMapper.convertValue(this,Map.class);
-        IShape shape=new Line();
-        shape.draw(map);
+
+        Line shape=new Line();
+        
+        shape.setX(this.getX());
+        shape.setY(this.getY());
+        shape.setColor(this.getColor());
         return shape;
     }
 }

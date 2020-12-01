@@ -1,6 +1,7 @@
 package eg.edu.alexu.csd.oop.draw;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -47,10 +48,13 @@ public class Rectangle extends OnePointShape{
     }
     @Override
         public IShape clone(){
-        ObjectMapper objectMapper=new ObjectMapper();
-        Map<?,?> map= objectMapper.convertValue(this,Map.class);
-        IShape shape=new Rectangle();
-        shape.draw(map);
+        Rectangle shape=new Rectangle();
+
+        shape.setColor(this.getColor());
+        shape.setHeight(this.getHeight());
+        shape.setWidth(this.getWidth());
+        shape.setX(this.getX());
+        shape.setY(this.getY());
         return shape;
     }
 }
