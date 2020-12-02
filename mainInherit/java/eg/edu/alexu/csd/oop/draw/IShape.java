@@ -7,4 +7,6 @@ void draw(Map<?,?> map);
 int getId();
 void setId(int id);
 IShape clone();
+String getType();
+String toString();
 }

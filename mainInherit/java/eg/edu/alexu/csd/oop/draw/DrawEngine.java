@@ -46,6 +46,7 @@ public class DrawEngine {//Singleton Class
             shape=f.getShape("ellipse");
         }
         shape.draw(map);
+
         shapes.add(shape);
         Hashtable<String,IShape> shapeOp=new Hashtable<String,IShape>();
         shapeOp.put("Draw",shape);
@@ -53,14 +54,13 @@ public class DrawEngine {//Singleton Class
     }
     public void updateShape(Map<?,?> map){
         shape=shapes.get((int)map.get("id"));//get the old shape
-
         Hashtable<String, IShape> shapeOp=new Hashtable<String,IShape>();
         shapeOp.put("Update",shape);
         undo.push(shapeOp);//store the old shape in the undo stack
-        shape.draw(map);//update shape
-        /**
-        TODO check if shape.draw(map) works
-         **/
+        Factory f=new Factory();
+        IShape newShape=f.getShape((String)map.get("type"));
+        newShape.draw(map);
+        shapes.set((int)map.get("id"),newShape);
     }
     public IShape removeShape(int id){
         Hashtable<String,IShape> shapeOp=new Hashtable<String,IShape>();
@@ -75,7 +75,7 @@ public class DrawEngine {//Singleton Class
     public IShape copyShape(int id){
         IShape shape=shapes.get(id);
         IShape copy=shape.clone();
-        copy.setId(id);
+        copy.setId(this.shapes.size());
         return copy;
     }
     public ArrayList<IShape> getShapes(){

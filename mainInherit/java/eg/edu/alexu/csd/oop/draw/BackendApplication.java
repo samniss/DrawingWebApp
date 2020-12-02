@@ -41,10 +41,11 @@ public class BackendApplication {
 		}catch(JsonProcessingException e){
 			e.printStackTrace();
 		}
+
 		engine.updateShape(map);
 	}
 	@RequestMapping({"/remove"})
-	public IShape removeShape(@RequestBody int id){
+	public IShape removeShape(@RequestParam int id){
 			return engine.removeShape(id);
 		}
 

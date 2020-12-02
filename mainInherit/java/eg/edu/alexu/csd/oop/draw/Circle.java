@@ -47,4 +47,8 @@ public Circle(){
 
     return shape;
     }
+    @Override
+    public String toString(){
+    return this.getType()+" "+this.getX()+" "+this.getY()+" "+this.getRadius()+" "+this.getColor()+" "+this.getId();
+    }
 }
