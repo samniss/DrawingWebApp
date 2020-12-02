@@ -10,6 +10,8 @@
     <button id="move" @click="Move()">Move</button>
     <button id="copy" @click="Copy()">Copy</button>
     <button id="delete" @click="Delete()">Delete</button>
+    <button id="undo" @click="Undo()">Undo</button>
+    <button id="redo" @click="Redo()">Redo</button>
 </div>
 </template>
 <script>
@@ -40,6 +42,8 @@ export default {
                 x:[],
                 y:[],
                 radius:0,
+                id:0,
+                color:"white"
             }
             this.$emit('draw-shape',this.shape)
         },
@@ -49,6 +53,8 @@ export default {
                 type:"line",
                 x:[],
                 y:[],
+                id:0,
+                color:"white"
             }
             this.$emit('draw-shape',this.shape);
         },
@@ -59,7 +65,9 @@ export default {
                 x:[],
                 y:[],
                 width:0,
-                height:0
+                height:0,
+                id:0,
+                color:"white"
             }
             this.$emit('draw-shape',this.shape);
         },
@@ -69,7 +77,9 @@ export default {
                 type:"square",
                 x:[],
                 y:[],
-                side:0
+                side:0,
+                id:0,
+                color:"white"
             }
             this.$emit('draw-shape',this.shape);
         },
@@ -79,6 +89,8 @@ export default {
                 type:"triangle",
                 x:[],
                 y:[],
+                id:0,
+                color:"white"
             }
             this.$emit('draw-shape',this.shape);
         },
@@ -90,11 +102,18 @@ export default {
                 y:[],
                 radiusX:0,
                 radiusY:0,
-                rotationAngle:0
+                rotationAngle:0,
+                id:0,
+                color:"white"
             }
             this.$emit('draw-shape',this.shape);
         },
-        
+        Undo:function(){
+            this.$emit('undo-shape');
+        },
+        Redo:function(){
+            this.$emit('redo-shape');
+        },
     }
 }
 </script>
