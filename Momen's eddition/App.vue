@@ -66,7 +66,6 @@ export default {
       this.shape=shape;
       },
     GetCoors:function(event){/*getting the x and y coordinates of the mouse when mouse is clicked on the canvas*/
-      console.log(event.type);
       var canvas=document.getElementById("canvas");
       var rect=event.target.getBoundingClientRect();//Get the surrounding rectangle of the canvas including padding and border
       var borderLeft=getComputedStyle(canvas,null).getPropertyValue('border-left-width')//get the left border of the canvas
@@ -144,7 +143,6 @@ export default {
         this.shapes.push(this.shape);//put the shape in the shapes array
         this.redraw=false;
         const t=this;
-        console.log(t.shape);
         axios.post("http://localhost:8081/draw",t.shape)
         .then(response=>{
           console.log(response.data)
@@ -204,7 +202,6 @@ export default {
         this.shapes.push(this.shape);//put the shape into the shapes array
         this.redraw=false;
         const t=this;
-        console.log(t.shape);
         axios.post("http://localhost:8081/draw",t.shape)
         .then(response=>{
           console.log(response.data)
@@ -329,7 +326,7 @@ export default {
     EllipseDialogInput:function(radiusX,radiusY,rotationAngle){
       this.shape.radiusX=radiusX*38;
       this.shape.radiusY=radiusY*38;
-      this.shape.rotationAngle=Math.PI-rotationAngle*Math.PI/180;
+      this.shape.rotationAngle=rotationAngle*Math.PI/180;
       var ellipsedialog=document.getElementById("ellipse-dialog");
       ellipsedialog.style.display="none";
       this.Ellipse();
@@ -384,6 +381,15 @@ export default {
         var p = (parseInt(Math.pow((x-h)*Math.cos(alpha)+(y-k)*Math.sin(alpha),2))/parseInt(Math.pow(a,2)))+(parseInt(Math.pow((x-h)*Math.sin(alpha)-(y-k)*Math.cos(alpha),2))/parseInt(Math.pow(b,2))); 
         return p; 
     }, 
+    checkPointOnLine:function(ptx,pty,v1x,v1y,v2x,v2y){
+      var m=(v2y-v1y)/(v2x-v1x);
+      var angle = Math.atan(m);
+      var a =Math.sqrt(Math.pow((v1x-v2x),2)+Math.pow((v1y-v2y),2))/2;
+      var b = 20;
+      var h=(v1x+v2x)/2;
+      var k=(v1y+v2y)/2;
+      return this.checkpoint(h,k,ptx,pty,a,b,angle);
+    },
     selecting:function(){
       var canvas=document.getElementById("canvas");
       var rect=event.target.getBoundingClientRect();//Get the surrounding rectangle of the canvas including padding and border
@@ -410,10 +416,7 @@ export default {
             }
           }
           else if(this.shapes[i].type==="line"){
-            //need to be modified
-            var A=((x-this.shapes[i].x[0])/(this.shapes[i].x[1]-this.shapes[i].x[0]));
-            var B=((y-this.shapes[i].y[0])/(this.shapes[i].y[1]-this.shapes[i].y[0]));
-            if(A==B){
+            if(this.checkPointOnLine(x,y,this.shapes[i].x[0],this.shapes[i].y[0],this.shapes[i].x[1],this.shapes[i].y[1])<=1){
               this.clearCanvas();
               this.m=i;
               this.redrawCanvas(this.m);
@@ -421,7 +424,7 @@ export default {
               this.wotkingShape=this.shapes[i];
               this.dotted=true; 
               this.Line();
-              break;   
+              break; 
             }
           }
           else if(this.shapes[i].type==="square"){
@@ -477,6 +480,11 @@ export default {
       }
     },
     moving:function(){
+      var x;
+      var y;
+      var xDiff;
+      var yDiff;
+      var i;
       if(this.wotkingShape!=null&&this.wotkingShape!=undefined){
         this.chooseMove();
         if(this.wotkingShape.type==="circle"){
@@ -495,7 +503,17 @@ export default {
             this.wotkingShape=null;
         }
         else if(this.wotkingShape.type==="line"){
+            x=parseFloat(this.wotkingShape.x[0]);
+            y=parseFloat(this.wotkingShape.y[0]);
             this.GetCoors(event);
+            xDiff=this.wotkingShape.x[0]-x;
+            yDiff=this.wotkingShape.y[0]-y;
+            for(i=1;i<this.wotkingShape.x.length;i++){
+              this.wotkingShape.x[i]=this.wotkingShape.x[i]+xDiff;
+            }
+            for(i=1;i<this.wotkingShape.y.length;i++){
+              this.wotkingShape.y[i]=this.wotkingShape.y[i]+yDiff;
+            }
             this.clearCanvas();
             this.redrawCanvas(this.m); 
             this.shape=this.wotkingShape;
@@ -540,12 +558,11 @@ export default {
             this.wotkingShape=null;
         }
         else if(this.wotkingShape.type==="triangle"){
-            var x=parseFloat(this.wotkingShape.x[0]);
-            var y=parseFloat(this.wotkingShape.y[0]);
+            x=parseFloat(this.wotkingShape.x[0]);
+            y=parseFloat(this.wotkingShape.y[0]);
             this.GetCoors(event);
-            var xDiff=this.wotkingShape.x[0]-x;
-            var yDiff=this.wotkingShape.y[0]-y;
-            var i;
+            xDiff=this.wotkingShape.x[0]-x;
+            yDiff=this.wotkingShape.y[0]-y;
             for(i=1;i<this.wotkingShape.x.length;i++){
               this.wotkingShape.x[i]=this.wotkingShape.x[i]+xDiff;
             }
@@ -597,7 +614,6 @@ export default {
               this.shape=response.data;
               this.shape.x=[t.shape.x];
               this.shape.y=[t.shape.y];
-              console.log(this.shape);
               this.GetCoors(event);
               this.Circle();
               this.clearCanvas();
@@ -616,7 +632,17 @@ export default {
             }).then(response=>{
               console.log(response);
               this.shape=response.data;
+              var x=parseFloat(this.shape.x[0]);
+              var y=parseFloat(this.shape.y[0]);
               this.GetCoors(event);
+              var xDiff=this.shape.x[0]-x;
+              var yDiff=this.shape.y[0]-y;
+              for(i=1;i<this.shape.x.length;i++){
+                this.shape.x[i]=this.shape.x[i]+xDiff;
+              }
+              for(i=1;i<this.shape.y.length;i++){
+                this.shape.y[i]=this.shape.y[i]+yDiff;
+              }
               this.Line();
               this.clearCanvas();
               this.redrawCanvas();
