@@ -12,7 +12,6 @@
     <button class="b" id="delete" @click="Delete()">Delete</button>
     <button class="b" id="undo" @click="Undo()">Undo</button>
     <button class="b" id="redo" @click="Redo()">Redo</button>
-    <button class="b" id="resize" @click="Resize()">Resize</button>
     <span class="palette">
       <button
         class="p"
@@ -159,9 +158,6 @@ export default {
     },
     Redo: function () {
       this.$emit("redo-shape");
-    },
-    Resize:function(){
-      this.$emit("resize-shape");
     },
     Red: function () {
       this.$emit("Colored", "red");

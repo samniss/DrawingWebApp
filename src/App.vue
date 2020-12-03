@@ -8,7 +8,6 @@
       @Deleted="deleting"
       @undo-shape="Undo"
       @redo-shape="Redo"
-      @resize-shape="Resize"
       @Colored="Color"
       id="shapes"
     />
