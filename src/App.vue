@@ -9,6 +9,7 @@
       @undo-shape="Undo"
       @redo-shape="Redo"
       @Colored="Color"
+      @resized="resizing"
       id="shapes"
     />
     <canvas
@@ -44,6 +45,7 @@ export default {
       delet: false,
       dotted: false,
       redraw: false,
+      resize:false,
       color: "",
       m: 0, //the index of the workingShape in the array of shapes
     };
@@ -79,6 +81,7 @@ export default {
       this.copy = false;
       this.delet = false;
       this.dotted = false;
+      this.resize=false;
       this.redrawCanvas();
       this.shape = shape;
     },
@@ -129,35 +132,54 @@ export default {
     Draw: function (event) {
       if (this.shape != null) {
         if (this.shape.type === "circle") {
+          var dialog;
+          var whdialog;
+          var ellipsedialog;
           this.GetCoors(event);
-          var dialog = document.getElementById("dialog-box");
+          dialog = document.getElementById("dialog-box");
           dialog.style.display = "block"; //show the dialog box for the user to enter the radius
           dialog.style.left = event.clientX + "px"; //make the top left x coordinate of the dialog box appear on the mouse x coordinate
           dialog.style.top = event.clientY + "px"; //make the top left y coordinate of the dialog box appear on the mouse y coordinate
+          whdialog = document.getElementById("w-h-dialog");
+          whdialog.style.display = "none";
+          ellipsedialog = document.getElementById("ellipse-dialog");
+          ellipsedialog.style.display = "none";
         } else if (this.shape.type === "line") {
           this.GetCoors(event);
           this.Line();
         } else if (this.shape.type === "rectangle") {
           this.GetCoors(event);
-          var whdialog = document.getElementById("w-h-dialog");
+          whdialog = document.getElementById("w-h-dialog");
           whdialog.style.display = "block"; //Show the dialog box for the user to enter the width and height of the rectangle
           whdialog.style.left = event.clientX + "px"; //make the top left x coordinate of the dialog box appear on the mouse x coordinate
           whdialog.style.top = event.clientY + "px"; //make the top left y coordinate of the dialog box appear on the mouse y coordinate
+          dialog = document.getElementById("dialog-box");
+          dialog.style.display = "none";
+          ellipsedialog = document.getElementById("ellipse-dialog");
+          ellipsedialog.style.display = "none";
         } else if (this.shape.type === "square") {
           this.GetCoors(event);
           var dialog2 = document.getElementById("dialog-box");
           dialog2.style.display = "block"; //show the dialog box for the user to enter the radius
           dialog2.style.left = event.clientX + "px"; //make the top left x coordinate of the dialog box appear on the mouse x coordinate
           dialog2.style.top = event.clientY + "px"; //make the top left y coordinate of the dialog box appear on the mouse y coordinate
+          whdialog = document.getElementById("w-h-dialog");
+          whdialog.style.display = "none";
+          ellipsedialog = document.getElementById("ellipse-dialog");
+          ellipsedialog.style.display = "none";
         } else if (this.shape.type === "triangle") {
           this.GetCoors(event);
           this.Triangle();
         } else if (this.shape.type === "ellipse") {
           this.GetCoors(event);
-          var ellipsedialog = document.getElementById("ellipse-dialog");
+          ellipsedialog = document.getElementById("ellipse-dialog");
           ellipsedialog.style.display = "block";
           ellipsedialog.style.left = event.clientX + "px";
           ellipsedialog.style.top = event.clientY + "px";
+          dialog = document.getElementById("dialog-box");
+          dialog.style.display = "none";
+          whdialog = document.getElementById("w-h-dialog");
+          whdialog.style.display = "none";
         }
       }
     },
@@ -177,12 +199,11 @@ export default {
         ctx.setLineDash([5, 5]);
         this.dotted = false;
       }
-
       ctx.stroke();
       ctx.fillStyle = this.shape.color;
       ctx.fill();
       ctx.setLineDash([]);
-      if (this.redraw != true && (this.draw === true || this.copy == true)) {
+      if (this.redraw != true&&this.resizing != true&& (this.draw === true || this.copy == true)) {
         this.shape.id = this.counter;
         this.counter++;
         this.shapes.push(this.shape); //put the shape in the shapes array
@@ -387,10 +408,15 @@ export default {
       }
       var dialog = document.getElementById("dialog-box");
       dialog.style.display = "none";
-      if (this.shape.type === "circle") {
-        this.Circle();
-      } else if (this.shape.type === "square") {
-        this.Square();
+      if(this.resize==true){
+        this.resizeCS();
+      }
+      else{
+        if (this.shape.type === "circle") {
+          this.Circle();
+        } else if (this.shape.type === "square") {
+          this.Square();
+        }
       }
     },
     WHDialogInput: function (width, height) {
@@ -398,7 +424,12 @@ export default {
       this.shape.height = parseFloat(height) * 38;
       var whdialog = document.getElementById("w-h-dialog");
       whdialog.style.display = "none";
-      this.Rectangle();
+      if(this.resize==true){
+        this.resizeCS();
+      }
+      else{
+        this.Rectangle();
+      }
     },
     EllipseDialogInput: function (radiusX, radiusY, rotationAngle) {
       this.shape.radiusX = radiusX * 38;
@@ -406,7 +437,12 @@ export default {
       this.shape.rotationAngle = (rotationAngle * Math.PI) / 180;
       var ellipsedialog = document.getElementById("ellipse-dialog");
       ellipsedialog.style.display = "none";
-      this.Ellipse();
+      if(this.resize==true){
+        this.resizeCS();
+      }
+      else{
+        this.Ellipse();
+      }
     },
     chooseDraw: function () {
       this.draw = true;
@@ -415,6 +451,7 @@ export default {
       this.copy = false;
       this.delet = false;
       this.dotted = false;
+      this.resize=false;
     },
     chooseSelect: function () {
       this.draw = false;
@@ -423,6 +460,7 @@ export default {
       this.copy = false;
       this.delet = false;
       this.dotted = false;
+      this.resize=false;
     },
     chooseMove: function () {
       this.draw = false;
@@ -431,6 +469,7 @@ export default {
       this.copy = false;
       this.delet = false;
       this.dotted = false;
+      this.resize=false;
     },
     chooseCopy: function () {
       this.draw = false;
@@ -439,6 +478,7 @@ export default {
       this.copy = true;
       this.delet = false;
       this.dotted = false;
+      this.resize=false;
     },
     sign: function (p1x, p1y, p2x, p2y, p3x, p3y) {
       return (p1x - p3x) * (p2y - p3y) - (p2x - p3x) * (p1y - p3y);
@@ -704,6 +744,85 @@ export default {
         }
       }
     },
+    resizeCS:function(){
+      this.clearCanvas();
+      this.redrawCanvas(this.m);
+      this.shape = this.shapes[this.m];
+      axios
+        .post("http://localhost:8081/update", this.shape)
+        .then((response) => {
+          console.log(response.data);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      if(this.shape.type=="circle"){
+        this.Circle(); 
+      }
+      else if(this.shape.type=="square"){
+        this.Square(); 
+      }
+      else if(this.shape.type=="rectangle"){
+        this.Rectangle();
+      }
+      else if(this.shape.type=="ellipse"){
+        this.Ellipse();
+      }
+      this.chooseDraw(); //to return to the default position which is drawind (may be modified then)
+      this.wotkingShape = null;
+      this.resize=false;
+    },
+    resizing: function () {
+      if (this.wotkingShape != null && this.wotkingShape != undefined) {
+        var dialog;
+        var whdialog
+        var ellipsedialog
+        var canvas = document.getElementById("canvas");
+        var rect = canvas.getBoundingClientRect(); //Get the surrounding rectangle of the canvas including padding and border
+        
+        if (this.wotkingShape.type === "circle"||this.wotkingShape.type === "square") {
+          //this.GetCoors(event);
+          this.shape = this.wotkingShape;
+          this.resize=true;
+          dialog = document.getElementById("dialog-box");
+          dialog.style.display = "block"; //show the dialog box for the user to enter the radius
+          dialog.style.left = rect.left+450+ "px"; //make the top left x coordinate of the dialog box appear on the mouse x coordinate
+          dialog.style.top = rect.top +200 + "px"; //make the top left y coordinate of the dialog box appear on the mouse y coordinate
+          console.log(rect.left);
+          console.log(rect.top);
+          whdialog = document.getElementById("w-h-dialog");
+          whdialog.style.display = "none";
+          ellipsedialog = document.getElementById("ellipse-dialog");
+          ellipsedialog.style.display = "none";
+        }
+        else if (this.wotkingShape.type === "rectangle") {
+          //this.GetCoors(event);
+          this.shape = this.wotkingShape;
+          this.resize=true;
+          whdialog = document.getElementById("w-h-dialog");
+          whdialog.style.display = "block"; //Show the dialog box for the user to enter the width and height of the rectangle
+          whdialog.style.left =rect.left+450+ "px"; //make the top left x coordinate of the dialog box appear on the mouse x coordinate
+          whdialog.style.top = rect.top  + 200+"px"; //make the top left y coordinate of the dialog box appear on the mouse y coordinate
+          dialog = document.getElementById("dialog-box");
+          dialog.style.display = "none";
+          ellipsedialog = document.getElementById("ellipse-dialog");
+          ellipsedialog.style.display = "none";
+        }
+        else if (this.wotkingShape.type === "ellipse") {
+          //this.GetCoors(event);
+          this.shape = this.wotkingShape;
+          this.resize=true;
+          ellipsedialog = document.getElementById("ellipse-dialog");
+          ellipsedialog.style.display = "block";
+          ellipsedialog.style.left =rect.left+ 450+"px"; //make the top left x coordinate of the dialog box appear on the mouse x coordinate
+          ellipsedialog.style.top = rect.top + 200+ "px"; //make the top left y coordinate of the dialog box appear on the mouse y coordinate
+          dialog = document.getElementById("dialog-box");
+          dialog.style.display = "none";
+          whdialog = document.getElementById("w-h-dialog");
+          whdialog.style.display = "none";
+        }
+      }
+    },
     moving: function () {
       var x;
       var y;
@@ -717,6 +836,7 @@ export default {
           this.clearCanvas();
           this.redrawCanvas(this.m);
           this.shape = this.wotkingShape;
+          this.shapes[this.m]=this.shape;
           axios
             .post("http://localhost:8081/update", this.shape)
             .then((response) => {
