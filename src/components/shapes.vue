@@ -13,6 +13,11 @@
     <button class="b" id="delete" @click="Delete()">Delete</button>
     <button class="b" id="undo" @click="Undo()">Undo</button>
     <button class="b" id="redo" @click="Redo()">Redo</button>
+    <button class="b" id="save" @click="Save()">Save</button>
+    <button class="b" id="sumbit" @click="Submit()">Submit</button>
+    <label>File
+        <input type="file" id="file" ref="file" accept="application/json, text/xml" @change="handleFileUpload()"/>
+    </label>
     <span class="palette">
       <button
         class="p"
@@ -162,6 +167,18 @@ export default {
     },
     Redo: function () {
       this.$emit("redo-shape");
+      
+    },
+    Save:function(){
+        this.$emit('save-dialog');
+        },
+    Submit:function(){
+        this.$emit('submitUpload');
+    },
+    handleFileUpload:function(){
+        this.uploadedFile =this.$refs.file.files[0];
+        console.log(this.uploadedFile.type)
+        this.$emit('load-File',this.uploadedFile);
     },
     Red: function () {
       this.$emit("Colored", "red");

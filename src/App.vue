@@ -10,6 +10,9 @@
       @redo-shape="Redo"
       @Colored="Color"
       @resized="resizing"
+      @save-dialog="SaveDialog" 
+      @submitUpload="Submit" 
+      @load-File="Load"
       id="shapes"
     />
     <canvas
@@ -21,6 +24,7 @@
     <DialogBox @dialog-input="DialogInput" id="dialog-box" />
     <WHDialog @w-h-input="WHDialogInput" id="w-h-dialog" />
     <EllipseDialog @ellipse-input="EllipseDialogInput" id="ellipse-dialog" />
+    <SaveNameDialog @save-dialog-input="Save" id="save-dialog-box" />
   </div>
 </template>
 
@@ -29,6 +33,7 @@ import shapes from "../src/components/shapes";
 import DialogBox from "../src/components/Dialog";
 import WHDialog from "../src/components/WHDialog";
 import EllipseDialog from "../src//components//EllipseDialog";
+import SaveNameDialog from "../src//components//SaveNameDialog";
 const axios = require("axios").default;
 export default {
   name: "App",
@@ -55,6 +60,7 @@ export default {
     DialogBox,
     WHDialog,
     EllipseDialog,
+    SaveNameDialog
   },
   methods: {
     Color: function (c) {
@@ -1169,6 +1175,71 @@ export default {
           console.log(e);
         });
     },
+    SaveDialog:function(){
+      var canvas = document.getElementById("canvas");
+      var rect = canvas.getBoundingClientRect(); //Get the surrounding rectangle of the canvas including padding and border
+      var saveDialog = document.getElementById("save-dialog-box");
+      saveDialog.style.display = "block"; //show the dialog box for the user to enter the radius
+      saveDialog.style.left = rect.left+450+ "px"; //make the top left x coordinate of the dialog box appear on the mouse x coordinate
+      saveDialog.style.top = rect.top +200 + "px"; //make the top left y coordinate of the dialog box appear on the mouse y coordinate
+      console.log(rect.left);
+      console.log(rect.top);
+    },
+    Save:function(fileToBeSaved,extension){
+      var saveDialog = document.getElementById("save-dialog-box");
+      saveDialog.style.display = "none";
+      axios.get('http://localhost:8081/save',{
+        params: {
+          saveFile: fileToBeSaved,
+          ext:extension
+        }
+      })
+      .then(response=>{
+        console.log(response.data)
+      }).catch(e=>{
+        console.log(e);
+      })
+    },
+    Load:function(uploadedFile){
+      this.loadFile = uploadedFile;
+    },
+    Submit:function(){
+      //var formdata = new FormData();
+      //formdata.append('file',this.loadFile);
+      //console.log(this.loadFile.name)
+      axios.get('http://localhost:8081/load',
+      {
+        params:{
+          uploadedFile: this.loadFile.name
+        }
+      }
+      )
+      .then(response=>{
+        console.log(response.data)
+        this.shapes=response.data
+        console.log(this.shapes)
+        for(var i= 0; i<this.shapes.length;i++){
+          this.shape = this.shapes[i]
+          if (this.shape.type != 'triangle' && this.shape.type != 'line') {
+            this.shape.x = [this.shape.x]
+            this.shape.y = [this.shape.y]
+          }
+          
+        }
+        this.shape = null
+        this.counter = this.shapes.length
+      })
+      .catch(e=>{
+        console.log(e);
+      })
+      setTimeout(() => {  
+          this.clearCanvas()
+          this.redrawCanvas()
+        },2000);
+      
+    },
+    
+  
     clearCanvas: function () {
       var canvas = document.getElementById("canvas");
       var ctx = canvas.getContext("2d");
