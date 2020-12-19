@@ -1,56 +1,19 @@
 package eg.edu.alexu.csd.oop.draw;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.logging.log4j.spi.ObjectThreadContextMap;
 
-import java.lang.Number;
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Circle implements IShape {
-    Number x;
-    Number y;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+@SuppressWarnings("unchecked")
+@JsonTypeName("Circle")
+public class Circle extends OnePointShape {
+    
+    Circle(){
+        setType("circle");
+    }
     Number radius;
-    int id;
-    String color;
-    String type="circle";
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-
-
-    public String getType() {
-        return type;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Number getX() {
-        return x;
-    }
-
-    public void setX(Number x) {
-        this.x = x;
-    }
-
-    public Number getY() {
-        return y;
-    }
-
-    public void setY(Number y) {
-        this.y = y;
-    }
-
+    
+    
     public Number getRadius() {
         return radius;
     }
@@ -67,11 +30,13 @@ public class Circle implements IShape {
     }
     @Override
     public IShape clone()  {
-        ObjectMapper objectMapper=new ObjectMapper();
-       Map<?,?> map= objectMapper.convertValue(this,Map.class);
-       IShape shape=new Circle();
-       shape.draw(map);
-    return shape;
+        Circle shape=new Circle();
+        shape.setRadius(this.getRadius());
+        shape.setColor(this.getColor());
+        shape.setX(this.getX());
+        shape.setY(this.getY());
+        return shape;
     }
-
+    
+    
 }

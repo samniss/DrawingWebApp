@@ -1,56 +1,17 @@
 package eg.edu.alexu.csd.oop.draw;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Map;
-
-public class Line implements IShape {
-   Number [] x=new Number[2];
-   Number [] y=new Number[2];
-   int id;
-   String color;
-
-    public String getType() {
-        return type;
-    }
-
-
-
-    String type="line";
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Number[] getX() {
-        return x;
-    }
-
-    public void setX(Number[] x) {
-        this.x = x;
-    }
-
-    public Number[] getY() {
-        return y;
-    }
-
-    public void setY(Number[] y) {
-        this.y = y;
-    }
+@SuppressWarnings({"unchecked","unused"})
+@JsonTypeName("Line")
+public class Line extends MultiplePointsShape {
+   Line(){
+       setType("line");
+   }
     public void draw(Map<?,?> map){
         setId((int)map.get("id"));
         setColor((String)map.get("color"));
@@ -60,10 +21,12 @@ public class Line implements IShape {
     }
     @Override
         public IShape clone(){
-        ObjectMapper objectMapper=new ObjectMapper();
-        Map<?,?> map= objectMapper.convertValue(this,Map.class);
-        IShape shape=new Line();
-        shape.draw(map);
-        return shape;
+            Line shape=new Line();
+            shape.setX(this.getX());
+            shape.setY(this.getY());
+            shape.setColor(this.getColor());
+            return shape;
     }
+    
+
 }

@@ -1,42 +1,20 @@
 package eg.edu.alexu.csd.oop.draw;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Ellipse implements IShape {
-    Number x;
-    Number y;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+@SuppressWarnings({"unchecked"})
+@JsonTypeName("Ellipse")
+public class Ellipse extends OnePointShape {
+    
+    Ellipse(){
+        setType("ellipse");
+    }
     Number radiusX;
     Number radiusY;
     Number rotationAngle;
-    String color;
-    int id;
-    String type="ellipse";
-
-    public Number getX() {
-        return x;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-
-
-    public void setX(Number x) {
-        this.x = x;
-    }
-
-    public Number getY() {
-        return y;
-    }
-
-    public void setY(Number y) {
-        this.y = y;
-    }
-
+    
     public Number getRadiusX() {
         return radiusX;
     }
@@ -61,21 +39,7 @@ public class Ellipse implements IShape {
         this.rotationAngle = rotationAngle;
     }
 
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
+   
     public void draw(Map<?,?> map){
         setRadiusX((Number)map.get("radiusX"));
         setRadiusY((Number) map.get("radiusY"));
@@ -87,10 +51,15 @@ public class Ellipse implements IShape {
     }
     @Override
     public IShape clone(){
-        ObjectMapper objectMapper=new ObjectMapper();
-        Map<?,?> map= objectMapper.convertValue(this,Map.class);
-        IShape shape=new Ellipse();
-        shape.draw(map);
+        Ellipse shape=new Ellipse();
+        shape.setColor(this.getColor());
+        shape.setX(this.getX());
+        shape.setY(this.getY());
+        shape.setRadiusX(this.getRadiusX());
+        shape.setRadiusY(this.getRadiusY());
+        shape.setRotationAngle(this.getRotationAngle());
         return shape;
     }
+    
+    
 }

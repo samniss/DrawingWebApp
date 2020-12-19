@@ -3,9 +3,10 @@ package eg.edu.alexu.csd.oop.draw;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-
+@SuppressWarnings({"unchecked","unused"})
 public class DrawEngine {//Singleton Class
     private static DrawEngine instance;
     private ArrayList<IShape> shapes=new ArrayList<IShape>();
@@ -47,23 +48,22 @@ public class DrawEngine {//Singleton Class
         }
         shape.draw(map);
         shapes.add(shape);
-        Hashtable<String,IShape> shapeOp=new Hashtable<String,IShape>();
+        LinkedHashMap<String,IShape> shapeOp=new LinkedHashMap<String,IShape>();
         shapeOp.put("Draw",shape);
         undo.push(shapeOp );
     }
     public void updateShape(Map<?,?> map){
         shape=shapes.get((int)map.get("id"));//get the old shape
-
-        Hashtable<String, IShape> shapeOp=new Hashtable<String,IShape>();
+        LinkedHashMap<String, IShape> shapeOp=new LinkedHashMap<String,IShape>();
         shapeOp.put("Update",shape);
         undo.push(shapeOp);//store the old shape in the undo stack
-        shape.draw(map);//update shape
-        /**
-        TODO check if shape.draw(map) works
-         **/
+        Factory f=new Factory();
+        IShape newShape=f.getShape((String)map.get("type"));
+        newShape.draw(map);
+        shapes.set((int)map.get("id"),newShape);
     }
     public IShape removeShape(int id){
-        Hashtable<String,IShape> shapeOp=new Hashtable<String,IShape>();
+        LinkedHashMap<String,IShape> shapeOp=new LinkedHashMap<String,IShape>();
         shape=shapes.get(id);
         shapeOp.put("Remove",shape);
         undo.push(shapeOp);//store the old shape in the undo stack
@@ -75,7 +75,7 @@ public class DrawEngine {//Singleton Class
     public IShape copyShape(int id){
         IShape shape=shapes.get(id);
         IShape copy=shape.clone();
-        copy.setId(id);
+        copy.setId(this.shapes.size());
         return copy;
     }
     public ArrayList<IShape> getShapes(){
@@ -83,7 +83,8 @@ public class DrawEngine {//Singleton Class
     }
     public IShape undo(){
         if(!undo.isEmpty()) {
-            Hashtable<String, IShape> shapeOp = (Hashtable<String, IShape>) undo.pop();
+            
+            LinkedHashMap<String,IShape> shapeOp = (LinkedHashMap<String,IShape>) undo.pop();
             if(shapeOp.containsKey("Draw")){
 				/*
 				to undo the draw,we put the shape in the redo stack
@@ -105,7 +106,7 @@ public class DrawEngine {//Singleton Class
 				 */
                 IShape oldShape=shapeOp.get("Update");//old shape
                 IShape newShape=shapes.get(oldShape.getId());//get new shape from array list
-                Hashtable<String,IShape>newShapeOp=new Hashtable<String,IShape>();
+                LinkedHashMap<String,IShape>newShapeOp=new LinkedHashMap<String,IShape>();
                 newShapeOp.put("Update",newShape);
                 redo.push(newShapeOp);//put the new shape in the redo stack
                 shapes.set(oldShape.getId(),oldShape);//put the old shape in the arraylist of draw engine
@@ -125,7 +126,7 @@ public class DrawEngine {//Singleton Class
     }
     public IShape redo(){
         if(!redo.isEmpty()){
-            Hashtable<String, IShape> shapeOp = (Hashtable<String, IShape>) redo.pop();
+            LinkedHashMap<String,IShape> shapeOp = (LinkedHashMap<String,IShape>) redo.pop();
             if(shapeOp.containsKey("Draw")){
                 /*
                 we put the shape in the arraylist of shapes
@@ -142,7 +143,7 @@ public class DrawEngine {//Singleton Class
                  */
                 IShape newShape=shapeOp.get("Update");//new Shape
                 IShape oldShape=shapes.get(newShape.getId());//oldShape
-                Hashtable<String,IShape>oldShapeOp=new Hashtable<String,IShape>();
+                LinkedHashMap<String,IShape>oldShapeOp=new LinkedHashMap<String,IShape>();
                 oldShapeOp.put("Update",oldShape);
                 undo.push(oldShapeOp);
                 shapes.set(newShape.getId(),newShape);
@@ -161,6 +162,27 @@ public class DrawEngine {//Singleton Class
             }
         }
         return null;
+    }
+    public Stack getRedo() {
+        return redo;
+    }
+    public IShape getShape() {
+        return shape;
+    }
+    public Stack getUndo() {
+        return undo;
+    }
+    public void setUndo(Stack undo) {
+        this.undo = undo;
+    }
+    public void setRedo(Stack redo) {
+        this.redo = redo;
+    }
+    public void setShapes(ArrayList<IShape> shapes) {
+        this.shapes = shapes;
+    }
+    public void setShape(IShape shape) {
+        this.shape = shape;
     }
 
 }

@@ -1,55 +1,19 @@
 package eg.edu.alexu.csd.oop.draw;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import java.util.ArrayList;
 import java.util.Map;
 
-public class Rectangle implements IShape{
-   Number x;
-   Number y;
+import com.fasterxml.jackson.annotation.JsonTypeName;
+@SuppressWarnings({"unchecked"})
+@JsonTypeName("Rectangle")
+public class Rectangle extends OnePointShape{
+   
+    Rectangle(){
+        setType("rectangle");
+    }
    Number width;
    Number height;
-   int id;
-   String color;
-   String type ="rectangle";
-    public String getColor() {
-        return color;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public Number getX() {
-        return x;
-    }
-
-    public void setX(Number x) {
-        this.x = x;
-    }
-
-    public Number getY() {
-        return y;
-    }
-
-    public void setY(Number y) {
-        this.y = y;
-    }
-
+   
     public Number getWidth() {
         return width;
     }
@@ -76,10 +40,13 @@ public class Rectangle implements IShape{
     }
     @Override
         public IShape clone(){
-        ObjectMapper objectMapper=new ObjectMapper();
-        Map<?,?> map= objectMapper.convertValue(this,Map.class);
-        IShape shape=new Rectangle();
-        shape.draw(map);
-        return shape;
+            Rectangle shape=new Rectangle();
+            shape.setColor(this.getColor());
+            shape.setHeight(this.getHeight());
+            shape.setWidth(this.getWidth());
+            shape.setX(this.getX());
+            shape.setY(this.getY());
+            return shape;
     }
+    
 }
